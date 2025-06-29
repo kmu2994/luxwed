@@ -201,7 +201,7 @@ const App = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
 
-  const categories = ['all', 'Photography', 'Catering', 'Venue', 'Decoration', 'Music', 'Transportation'];
+  const categories = ['all', 'Photography', 'Catering', 'Venue', 'Decoration', 'Music', 'Transportation', 'Makeup', 'Invitations', 'Jewelry', 'Clothing'];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 to-pink-100">
