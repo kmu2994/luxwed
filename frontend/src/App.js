@@ -362,28 +362,28 @@ const App = () => {
                   <p className="text-lg mb-4">Welcome to your AI Wedding Planner!</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl mx-auto">
                     <button
-                      onClick={() => setChatInput("Help me plan a wedding with a budget of ₹5 lakhs")}
+                      onClick={() => setChatInput("What are the current wedding photography prices in Mumbai for 2025?")}
                       className="p-3 bg-white rounded-lg border border-rose-200 hover:border-rose-300 text-left transition-colors"
                     >
-                      💰 Help me plan a budget wedding
+                      🌐 Get current market prices
                     </button>
                     <button
-                      onClick={() => setChatInput("Show me the best photographers in Mumbai")}
+                      onClick={() => setChatInput("What are the latest wedding trends for 2025?")}
                       className="p-3 bg-white rounded-lg border border-rose-200 hover:border-rose-300 text-left transition-colors"
                     >
-                      📸 Find vendors in my city
+                      ✨ Latest 2025 wedding trends
                     </button>
                     <button
-                      onClick={() => setChatInput("Create a 6-month wedding planning timeline")}
+                      onClick={() => setChatInput("Find me real-time vendor availability in Delhi")}
                       className="p-3 bg-white rounded-lg border border-rose-200 hover:border-rose-300 text-left transition-colors"
                     >
-                      📅 Create wedding timeline
+                      🔍 Real-time vendor search
                     </button>
                     <button
-                      onClick={() => setChatInput("What's the average cost of a 200-guest wedding?")}
+                      onClick={() => setChatInput("What's the weather like for outdoor weddings this season?")}
                       className="p-3 bg-white rounded-lg border border-rose-200 hover:border-rose-300 text-left transition-colors"
                     >
-                      💸 Wedding cost estimation
+                      🌤️ Weather & seasonal advice
                     </button>
                   </div>
                 </div>
