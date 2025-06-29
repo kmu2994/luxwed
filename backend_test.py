@@ -74,7 +74,11 @@ test_results = {
     "vendor_recommendations": {"status": "Not tested", "details": ""},
     "inquiries": {"status": "Not tested", "details": ""},
     "wedding_plans": {"status": "Not tested", "details": ""},
-    "platform_stats": {"status": "Not tested", "details": ""}
+    "platform_stats": {"status": "Not tested", "details": ""},
+    "web_search_enhancement": {"status": "Not tested", "details": ""},
+    "expanded_sample_database": {"status": "Not tested", "details": ""},
+    "new_vendor_creation": {"status": "Not tested", "details": ""},
+    "category_filtering": {"status": "Not tested", "details": ""}
 }
 
 created_user_id = None
