@@ -335,6 +335,226 @@ const App = () => {
         </div>
       )}
 
+      {/* Add Vendor Page */}
+      {currentPage === 'add-vendor' && (
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="bg-white rounded-2xl shadow-xl border border-rose-100 overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-rose-500 to-pink-500 p-6 text-white">
+              <h2 className="text-3xl font-bold">Add New Vendor 💼</h2>
+              <p className="text-rose-100">
+                Join our zero-commission platform and connect with couples planning their dream weddings.
+              </p>
+            </div>
+
+            {/* Form */}
+            <div className="p-8">
+              <form onSubmit={handleVendorFormSubmit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Basic Info */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Contact Person Name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={vendorFormData.name}
+                      onChange={(e) => updateVendorFormField('name', e.target.value)}
+                      className="w-full p-3 border border-rose-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Business Name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={vendorFormData.business_name}
+                      onChange={(e) => updateVendorFormField('business_name', e.target.value)}
+                      className="w-full p-3 border border-rose-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                      placeholder="Enter your business name"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={vendorFormData.email}
+                      onChange={(e) => updateVendorFormField('email', e.target.value)}
+                      className="w-full p-3 border border-rose-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                      placeholder="your.email@example.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      value={vendorFormData.phone}
+                      onChange={(e) => updateVendorFormField('phone', e.target.value)}
+                      className="w-full p-3 border border-rose-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                      placeholder="+91 9876543210"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Category *
+                    </label>
+                    <select
+                      required
+                      value={vendorFormData.category}
+                      onChange={(e) => updateVendorFormField('category', e.target.value)}
+                      className="w-full p-3 border border-rose-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    >
+                      <option value="Photography">Photography</option>
+                      <option value="Catering">Catering</option>
+                      <option value="Venue">Venue</option>
+                      <option value="Decoration">Decoration</option>
+                      <option value="Music">Music</option>
+                      <option value="Transportation">Transportation</option>
+                      <option value="Makeup">Makeup & Beauty</option>
+                      <option value="Invitations">Invitations</option>
+                      <option value="Jewelry">Jewelry</option>
+                      <option value="Clothing">Wedding Clothing</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Location *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={vendorFormData.location}
+                      onChange={(e) => updateVendorFormField('location', e.target.value)}
+                      className="w-full p-3 border border-rose-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                      placeholder="Mumbai, Delhi, Bangalore..."
+                    />
+                  </div>
+                </div>
+
+                {/* Pricing */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Pricing Range *
+                  </label>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <input
+                        type="number"
+                        required
+                        value={vendorFormData.pricing_range.min}
+                        onChange={(e) => updateVendorFormField('pricing_range', {
+                          ...vendorFormData.pricing_range,
+                          min: e.target.value
+                        })}
+                        className="w-full p-3 border border-rose-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                        placeholder="Minimum price"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="number"
+                        required
+                        value={vendorFormData.pricing_range.max}
+                        onChange={(e) => updateVendorFormField('pricing_range', {
+                          ...vendorFormData.pricing_range,
+                          max: e.target.value
+                        })}
+                        className="w-full p-3 border border-rose-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                        placeholder="Maximum price"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Services */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Services Offered *
+                  </label>
+                  <div className="space-y-3">
+                    {vendorFormData.services.map((service, index) => (
+                      <div key={index} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={service}
+                          onChange={(e) => updateService(index, e.target.value)}
+                          className="flex-1 p-3 border border-rose-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                          placeholder="Enter service name"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeService(index)}
+                          className="bg-red-500 text-white px-4 py-3 rounded-lg hover:bg-red-600 transition-colors"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={addService}
+                      className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                    >
+                      + Add Service
+                    </button>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Business Description *
+                  </label>
+                  <textarea
+                    required
+                    rows={4}
+                    value={vendorFormData.description}
+                    onChange={(e) => updateVendorFormField('description', e.target.value)}
+                    className="w-full p-3 border border-rose-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    placeholder="Describe your business, experience, and what makes you special..."
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <div className="flex gap-4">
+                  <button
+                    type="submit"
+                    className="flex-1 bg-gradient-to-r from-rose-500 to-pink-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-rose-600 hover:to-pink-600 transition-all transform hover:scale-105"
+                  >
+                    Add Vendor
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      resetVendorForm();
+                      setCurrentPage('vendors');
+                    }}
+                    className="bg-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-400 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Vendors Page */}
       {currentPage === 'vendors' && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
