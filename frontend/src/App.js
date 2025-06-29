@@ -123,6 +123,72 @@ const App = () => {
     fetchVendors(category);
   };
 
+  const resetVendorForm = () => {
+    setVendorFormData({
+      name: '',
+      business_name: '',
+      email: '',
+      phone: '',
+      category: 'Photography',
+      services: [],
+      pricing_range: { min: 0, max: 0 },
+      location: '',
+      description: '',
+      portfolio_images: []
+    });
+  };
+
+  const handleVendorFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = {
+        ...vendorFormData,
+        services: vendorFormData.services.filter(service => service.trim() !== ''),
+        pricing_range: {
+          min: parseInt(vendorFormData.pricing_range.min) || 0,
+          max: parseInt(vendorFormData.pricing_range.max) || 0
+        }
+      };
+      
+      await axios.post(`${API}/vendors`, formData);
+      alert('Vendor added successfully!');
+      resetVendorForm();
+      setShowVendorForm(false);
+      fetchVendors(); // Refresh vendor list
+    } catch (error) {
+      console.error('Error adding vendor:', error);
+      alert('Error adding vendor. Please try again.');
+    }
+  };
+
+  const updateVendorFormField = (field, value) => {
+    setVendorFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const addService = () => {
+    setVendorFormData(prev => ({
+      ...prev,
+      services: [...prev.services, '']
+    }));
+  };
+
+  const updateService = (index, value) => {
+    setVendorFormData(prev => ({
+      ...prev,
+      services: prev.services.map((service, i) => i === index ? value : service)
+    }));
+  };
+
+  const removeService = (index) => {
+    setVendorFormData(prev => ({
+      ...prev,
+      services: prev.services.filter((_, i) => i !== index)
+    }));
+  };
+
   // Auto scroll chat to bottom
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
