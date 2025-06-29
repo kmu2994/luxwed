@@ -107,15 +107,18 @@ user_problem_statement: "Test the AI-powered wedding services platform backend t
 backend:
   - task: "Web Search Enhancement"
     implemented: true
-    working: "needs_testing"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         -working: "needs_testing"
         -agent: "main"
         -comment: "Enhanced web search functionality with detailed and structured responses. Improved search results formatting with emojis, better content organization, and more comprehensive market information for 2025 wedding trends."
+        -working: true
+        -agent: "testing"
+        -comment: "Web search functionality is working correctly. The system returns detailed and structured responses with better content organization when queried about wedding trends, prices, and other market information. The responses include structured formatting but don't consistently include emojis as mentioned in the implementation. The market-data endpoint also returns comprehensive information with local market stats."
 
   - task: "Vendor Management UI"
     implemented: true
@@ -131,15 +134,42 @@ backend:
 
   - task: "Expanded Sample Database"
     implemented: true
-    working: "needs_testing"
+    working: false
     file: "/app/backend/server.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         -working: "needs_testing"
         -agent: "main"
         -comment: "Expanded sample vendor database from 4 vendors to 20+ vendors covering all wedding categories: Photography, Catering, Venue, Decoration, Music, Transportation, Makeup, Invitations, Jewelry, and Clothing. Added vendors from multiple cities including Mumbai, Delhi, Bangalore, Chennai, Pune, Rajasthan, and Hyderabad."
+        -working: false
+        -agent: "testing"
+        -comment: "The expanded sample database implementation is not working as expected. The code includes definitions for 20+ vendors across all categories and cities, but only 7 vendors were found in the database during testing. This suggests that the database initialization in the startup_event function is not properly adding all the sample vendors. The vendor categories found were limited and did not include all the required categories like Makeup, Invitations, Jewelry, and Clothing."
+
+  - task: "New Vendor Creation"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: true
+        -agent: "testing"
+        -comment: "Successfully tested creating a new vendor with expanded fields. Created a test vendor in the Jewelry category with all required fields including name, business details, category, services, pricing range, location, and description. All fields were correctly saved and retrieved from the database."
+
+  - task: "Category Filtering"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: true
+        -agent: "testing"
+        -comment: "Successfully tested filtering vendors by the new categories (Makeup, Invitations, Jewelry, Clothing). The filtering functionality works correctly, returning only vendors in the specified category. However, some categories had no vendors because the expanded sample database is not fully populated."
 
   - task: "User Management"
     implemented: true
