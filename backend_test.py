@@ -402,6 +402,243 @@ def test_platform_stats():
         print(f"Error testing platform stats: {str(e)}")
         return False
 
+def test_web_search_enhancement():
+    global created_user_id
+    print_separator()
+    print("Testing Web Search Enhancement...")
+    
+    if not created_user_id:
+        test_results["web_search_enhancement"]["status"] = "Skipped"
+        test_results["web_search_enhancement"]["details"] = "User creation failed, cannot test web search"
+        print("Skipping web search test as user creation failed")
+        return False
+    
+    try:
+        # Test sending chat messages that should trigger web search
+        print("Testing web search with wedding photography prices query...")
+        photography_query = {
+            "user_id": created_user_id,
+            "message": "What are current wedding photography prices in Mumbai in 2025?"
+        }
+        
+        response = requests.post(f"{API_URL}/chat", json=photography_query)
+        response.raise_for_status()
+        photography_data = response.json()
+        
+        # Check if web search was used
+        web_search_used = photography_data.get("web_search_used", False)
+        print(f"Web search used: {web_search_used}")
+        print(f"Response excerpt: {photography_data.get('response')[:150]}...")
+        
+        # Test another query for wedding trends
+        print("Testing web search with wedding trends query...")
+        trends_query = {
+            "user_id": created_user_id,
+            "message": "What are the latest 2025 wedding trends?"
+        }
+        
+        response = requests.post(f"{API_URL}/chat", json=trends_query)
+        response.raise_for_status()
+        trends_data = response.json()
+        
+        # Check if web search was used
+        web_search_used = trends_data.get("web_search_used", False)
+        print(f"Web search used: {web_search_used}")
+        print(f"Response excerpt: {trends_data.get('response')[:150]}...")
+        
+        # Test direct market data endpoint
+        print("Testing market data endpoint...")
+        response = requests.get(f"{API_URL}/market-data?category=Photography&location=Mumbai")
+        response.raise_for_status()
+        market_data = response.json()
+        
+        print(f"Market data excerpt: {market_data.get('web_market_info')[:150]}...")
+        print(f"Local market stats: {market_data.get('local_market_stats')}")
+        
+        # Check if responses contain emojis and structured formatting
+        has_emojis = False
+        has_structured_format = False
+        
+        for response_data in [photography_data, trends_data]:
+            response_text = response_data.get('response', '')
+            if any(emoji in response_text for emoji in ['🔍', '📸', '💍', '👰', '🤵', '💐', '🎉']):
+                has_emojis = True
+            
+            if '•' in response_text or '*' in response_text or any(heading in response_text for heading in ['TRENDS', 'PRICING', 'COSTS', 'ANALYSIS']):
+                has_structured_format = True
+        
+        if has_emojis and has_structured_format:
+            test_results["web_search_enhancement"]["status"] = "Passed"
+            test_results["web_search_enhancement"]["details"] = "Web search enhancement is working with emojis and structured formatting"
+        else:
+            test_results["web_search_enhancement"]["status"] = "Partial"
+            test_results["web_search_enhancement"]["details"] = f"Web search is working but formatting improvements are incomplete. Has emojis: {has_emojis}, Has structure: {has_structured_format}"
+        
+        return True
+    
+    except Exception as e:
+        test_results["web_search_enhancement"]["status"] = "Failed"
+        test_results["web_search_enhancement"]["details"] = f"Error: {str(e)}"
+        print(f"Error testing web search enhancement: {str(e)}")
+        return False
+
+def test_expanded_sample_database():
+    print_separator()
+    print("Testing Expanded Sample Database...")
+    
+    try:
+        # Get all vendors to check the total count
+        print("Getting all vendors to check database size...")
+        response = requests.get(f"{API_URL}/vendors")
+        response.raise_for_status()
+        all_vendors = response.json()
+        
+        vendor_count = len(all_vendors)
+        print(f"Total vendors in database: {vendor_count}")
+        
+        # Check if we have at least 20 vendors
+        if vendor_count < 20:
+            test_results["expanded_sample_database"]["status"] = "Failed"
+            test_results["expanded_sample_database"]["details"] = f"Expected at least 20 vendors, but found only {vendor_count}"
+            return False
+        
+        # Check for vendors in all required categories
+        required_categories = [
+            "Photography", "Catering", "Venue", "Decoration", 
+            "Music", "Transportation", "Makeup", "Invitations", 
+            "Jewelry", "Clothing"
+        ]
+        
+        # Check for vendors in all required cities
+        required_cities = [
+            "Mumbai", "Delhi", "Bangalore", "Chennai", 
+            "Pune", "Rajasthan", "Hyderabad"
+        ]
+        
+        # Count vendors by category and city
+        categories_found = set()
+        cities_found = set()
+        
+        for vendor in all_vendors:
+            if vendor.get("category") in required_categories:
+                categories_found.add(vendor.get("category"))
+            
+            vendor_location = vendor.get("location", "")
+            for city in required_cities:
+                if city in vendor_location:
+                    cities_found.add(city)
+        
+        print(f"Categories found: {', '.join(categories_found)}")
+        print(f"Cities found: {', '.join(cities_found)}")
+        
+        # Check if all required categories and cities are present
+        missing_categories = set(required_categories) - categories_found
+        missing_cities = set(required_cities) - cities_found
+        
+        if missing_categories or missing_cities:
+            test_results["expanded_sample_database"]["status"] = "Partial"
+            test_results["expanded_sample_database"]["details"] = f"Database expanded but missing some required data. Missing categories: {missing_categories}, Missing cities: {missing_cities}"
+            return True
+        
+        test_results["expanded_sample_database"]["status"] = "Passed"
+        test_results["expanded_sample_database"]["details"] = f"Successfully verified expanded database with {vendor_count} vendors across all required categories and cities"
+        return True
+    
+    except Exception as e:
+        test_results["expanded_sample_database"]["status"] = "Failed"
+        test_results["expanded_sample_database"]["details"] = f"Error: {str(e)}"
+        print(f"Error testing expanded sample database: {str(e)}")
+        return False
+
+def test_new_vendor_creation():
+    print_separator()
+    print("Testing New Vendor Creation with Expanded Fields...")
+    
+    try:
+        # Test creating a vendor with the new category
+        print("Creating a test vendor in the Jewelry category...")
+        response = requests.post(f"{API_URL}/vendors", json=test_new_vendor)
+        response.raise_for_status()
+        vendor_data = response.json()
+        new_vendor_id = vendor_data["id"]
+        print(f"Created vendor with ID: {new_vendor_id}")
+        
+        # Verify the vendor was created with all fields
+        print(f"Getting vendor with ID: {new_vendor_id}")
+        response = requests.get(f"{API_URL}/vendors/{new_vendor_id}")
+        response.raise_for_status()
+        retrieved_vendor = response.json()
+        
+        # Check if all fields were saved correctly
+        all_fields_correct = (
+            retrieved_vendor["name"] == test_new_vendor["name"] and
+            retrieved_vendor["business_name"] == test_new_vendor["business_name"] and
+            retrieved_vendor["category"] == test_new_vendor["category"] and
+            retrieved_vendor["location"] == test_new_vendor["location"] and
+            len(retrieved_vendor["services"]) == len(test_new_vendor["services"]) and
+            retrieved_vendor["pricing_range"]["min"] == test_new_vendor["pricing_range"]["min"] and
+            retrieved_vendor["pricing_range"]["max"] == test_new_vendor["pricing_range"]["max"]
+        )
+        
+        if all_fields_correct:
+            print("All vendor fields were saved correctly")
+            test_results["new_vendor_creation"]["status"] = "Passed"
+            test_results["new_vendor_creation"]["details"] = f"Successfully created vendor with expanded fields. Vendor ID: {new_vendor_id}"
+        else:
+            print("Some vendor fields were not saved correctly")
+            test_results["new_vendor_creation"]["status"] = "Partial"
+            test_results["new_vendor_creation"]["details"] = f"Vendor created but some fields were not saved correctly"
+        
+        return True
+    
+    except Exception as e:
+        test_results["new_vendor_creation"]["status"] = "Failed"
+        test_results["new_vendor_creation"]["details"] = f"Error: {str(e)}"
+        print(f"Error testing new vendor creation: {str(e)}")
+        return False
+
+def test_category_filtering():
+    print_separator()
+    print("Testing Category Filtering for New Categories...")
+    
+    try:
+        # Test filtering for each of the new categories
+        new_categories = ["Makeup", "Invitations", "Jewelry", "Clothing"]
+        
+        for category in new_categories:
+            print(f"Testing filtering for {category} category...")
+            response = requests.get(f"{API_URL}/vendors?category={category}")
+            response.raise_for_status()
+            vendors = response.json()
+            
+            print(f"Found {len(vendors)} vendors in {category} category")
+            
+            # Check if we found any vendors in this category
+            if len(vendors) == 0:
+                print(f"No vendors found in {category} category")
+                test_results["category_filtering"]["status"] = "Partial"
+                test_results["category_filtering"]["details"] = f"Filtering works but no vendors found in {category} category"
+                continue
+            
+            # Verify that all returned vendors are in the correct category
+            all_correct_category = all(vendor["category"] == category for vendor in vendors)
+            
+            if not all_correct_category:
+                print(f"Some vendors returned for {category} category have incorrect category")
+                test_results["category_filtering"]["status"] = "Failed"
+                test_results["category_filtering"]["details"] = f"Category filtering returned incorrect results for {category}"
+                return False
+        
+        test_results["category_filtering"]["status"] = "Passed"
+        test_results["category_filtering"]["details"] = "Successfully filtered vendors by all new categories"
+        return True
+    
+    except Exception as e:
+        test_results["category_filtering"]["status"] = "Failed"
+        test_results["category_filtering"]["details"] = f"Error: {str(e)}"
+        print(f"Error testing category filtering: {str(e)}")
+        return False
+
 def run_all_tests():
     print("\n" + "="*30 + " STARTING BACKEND TESTS " + "="*30 + "\n")
     
