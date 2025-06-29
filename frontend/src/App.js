@@ -402,6 +402,12 @@ const App = () => {
                       </div>
                       <div className="flex-1">
                         <p className="whitespace-pre-wrap">{message.content}</p>
+                        {message.role === 'assistant' && message.webSearchUsed && (
+                          <div className="mt-2 flex items-center gap-2 text-sm text-green-600">
+                            <span className="animate-pulse">🌐</span>
+                            <span>Real-time web data used</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
