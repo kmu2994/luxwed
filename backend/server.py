@@ -723,29 +723,46 @@ async def startup_event():
     # Create sample vendors if database is empty
     vendor_count = await db.vendors.count_documents({})
     if vendor_count == 0:
-        logger.info("Initializing sample vendors...")
+        logger.info("Initializing comprehensive sample vendors...")
         sample_vendors = [
+            # Photography Vendors
             {
                 "name": "Rajesh Photography",
                 "business_name": "Elite Wedding Photography",
                 "email": "rajesh@elitewedding.com",
                 "phone": "+91 9876543210",
                 "category": "Photography",
-                "services": ["Candid Photography", "Traditional Photography", "Pre-Wedding Shoots"],
+                "services": ["Candid Photography", "Traditional Photography", "Pre-Wedding Shoots", "Drone Photography"],
                 "pricing_range": {"min": 50000, "max": 150000},
                 "location": "Mumbai",
-                "description": "Award-winning wedding photographer with 8+ years of experience in capturing your special moments.",
+                "description": "Award-winning wedding photographer with 8+ years of experience in capturing your special moments with cinematic storytelling.",
                 "rating": 4.8,
                 "total_reviews": 156,
                 "verified": True
             },
             {
+                "name": "Priya Captures",
+                "business_name": "Artistic Wedding Photography",
+                "email": "priya@artisticwedding.com",
+                "phone": "+91 9876543211",
+                "category": "Photography",
+                "services": ["Destination Wedding", "Fashion Photography", "Portrait Sessions", "Same Day Edits"],
+                "pricing_range": {"min": 75000, "max": 250000},
+                "location": "Delhi",
+                "description": "Creative wedding photographer specializing in destination weddings and artistic storytelling with modern techniques.",
+                "rating": 4.9,
+                "total_reviews": 89,
+                "verified": True
+            },
+            
+            # Catering Vendors
+            {
                 "name": "Meera Caterers",
                 "business_name": "Royal Feast Catering",
                 "email": "meera@royalfeast.com",
-                "phone": "+91 9876543211",
+                "phone": "+91 9876543212",
                 "category": "Catering",
-                "services": ["Multi-Cuisine", "Traditional Indian", "Live Counters"],
+                "services": ["Multi-Cuisine", "Traditional Indian", "Live Counters", "Dessert Stations"],
                 "pricing_range": {"min": 800, "max": 2500},
                 "location": "Mumbai",
                 "description": "Premium catering services with authentic flavors and impeccable presentation for your dream wedding.",
@@ -754,31 +771,257 @@ async def startup_event():
                 "verified": True
             },
             {
+                "name": "Chef Ramesh",
+                "business_name": "Spice Garden Catering",
+                "email": "ramesh@spicegarden.com",
+                "phone": "+91 9876543213",
+                "category": "Catering",
+                "services": ["South Indian Cuisine", "North Indian Delicacies", "Continental Menu", "Healthy Options"],
+                "pricing_range": {"min": 1000, "max": 3500},
+                "location": "Bangalore",
+                "description": "Experienced chef offering diverse cuisine options with focus on quality ingredients and traditional cooking methods.",
+                "rating": 4.7,
+                "total_reviews": 134,
+                "verified": True
+            },
+            
+            # Venue Vendors
+            {
                 "name": "Grand Palace Hotel",
                 "business_name": "Grand Palace Wedding Venue",
                 "email": "events@grandpalace.com",
-                "phone": "+91 9876543212",
+                "phone": "+91 9876543214",
                 "category": "Venue",
-                "services": ["Banquet Halls", "Garden Wedding", "Poolside Venue"],
+                "services": ["Banquet Halls", "Garden Wedding", "Poolside Venue", "Rooftop Events"],
                 "pricing_range": {"min": 200000, "max": 800000},
                 "location": "Mumbai",
-                "description": "Luxurious wedding venue with stunning architecture and world-class amenities.",
+                "description": "Luxurious wedding venue with stunning architecture, world-class amenities, and personalized service.",
                 "rating": 4.9,
                 "total_reviews": 203,
                 "verified": True
             },
             {
+                "name": "Heritage Manor",
+                "business_name": "Royal Heritage Wedding Resort",
+                "email": "bookings@heritagemanor.com",
+                "phone": "+91 9876543215",
+                "category": "Venue",
+                "services": ["Palace Wedding", "Heritage Venue", "Destination Wedding", "Outdoor Ceremonies"],
+                "pricing_range": {"min": 300000, "max": 1200000},
+                "location": "Rajasthan",
+                "description": "Magnificent heritage property offering royal wedding experiences with traditional architecture and modern facilities.",
+                "rating": 4.8,
+                "total_reviews": 156,
+                "verified": True
+            },
+            
+            # Decoration Vendors
+            {
                 "name": "Elegant Decorators",
                 "business_name": "Elegant Event Decorators",
                 "email": "info@elegantdeco.com",
-                "phone": "+91 9876543213",
+                "phone": "+91 9876543216",
                 "category": "Decoration",
-                "services": ["Floral Decoration", "Theme Decoration", "Stage Design"],
+                "services": ["Floral Decoration", "Theme Decoration", "Stage Design", "Lighting Setup"],
                 "pricing_range": {"min": 75000, "max": 300000},
                 "location": "Mumbai",
-                "description": "Transform your wedding venue into a magical space with our creative decoration services.",
+                "description": "Transform your wedding venue into a magical space with our creative decoration services and attention to detail.",
                 "rating": 4.7,
                 "total_reviews": 134,
+                "verified": True
+            },
+            {
+                "name": "Dream Designers",
+                "business_name": "Dream Wedding Designs",
+                "email": "contact@dreamdesigns.com",
+                "phone": "+91 9876543217",
+                "category": "Decoration",
+                "services": ["Mandap Decoration", "Reception Decor", "Entrance Designs", "Flower Arrangements"],
+                "pricing_range": {"min": 60000, "max": 250000},
+                "location": "Delhi",
+                "description": "Creative decoration specialists bringing your wedding dreams to life with innovative designs and quality execution.",
+                "rating": 4.6,
+                "total_reviews": 98,
+                "verified": True
+            },
+            
+            # Music Vendors
+            {
+                "name": "DJ Arjun",
+                "business_name": "Beats & Melodies Entertainment",
+                "email": "arjun@beatsmelodies.com",
+                "phone": "+91 9876543218",
+                "category": "Music",
+                "services": ["DJ Services", "Live Music", "Sound System", "Lighting Effects"],
+                "pricing_range": {"min": 25000, "max": 100000},
+                "location": "Mumbai",
+                "description": "Professional DJ and entertainment services to keep your wedding celebration alive with the perfect music mix.",
+                "rating": 4.5,
+                "total_reviews": 167,
+                "verified": True
+            },
+            {
+                "name": "Classical Musicians",
+                "business_name": "Harmony Traditional Music",
+                "email": "info@harmonymusic.com",
+                "phone": "+91 9876543219",
+                "category": "Music",
+                "services": ["Classical Music", "Traditional Instruments", "Vocalist", "Wedding Songs"],
+                "pricing_range": {"min": 30000, "max": 120000},
+                "location": "Chennai",
+                "description": "Traditional music specialists providing authentic classical and folk music for traditional wedding ceremonies.",
+                "rating": 4.8,
+                "total_reviews": 78,
+                "verified": True
+            },
+            
+            # Transportation Vendors
+            {
+                "name": "Royal Rides",
+                "business_name": "Royal Wedding Transportation",
+                "email": "bookings@royalrides.com",
+                "phone": "+91 9876543220",
+                "category": "Transportation",
+                "services": ["Luxury Cars", "Vintage Cars", "Horse Carriage", "Decorated Vehicles"],
+                "pricing_range": {"min": 15000, "max": 75000},
+                "location": "Mumbai",
+                "description": "Elegant transportation solutions for grooms and wedding parties with luxury and vintage vehicle options.",
+                "rating": 4.4,
+                "total_reviews": 112,
+                "verified": True
+            },
+            {
+                "name": "Elite Transport",
+                "business_name": "Elite Wedding Cars",
+                "email": "info@elitetransport.com",
+                "phone": "+91 9876543221",
+                "category": "Transportation",
+                "services": ["Premium Cars", "SUV Fleet", "Bus Services", "Airport Transfers"],
+                "pricing_range": {"min": 12000, "max": 60000},
+                "location": "Delhi",
+                "description": "Premium transportation services ensuring comfortable and stylish arrival for your special wedding moments.",
+                "rating": 4.3,
+                "total_reviews": 89,
+                "verified": True
+            },
+            
+            # Makeup Vendors
+            {
+                "name": "Glamour Studio",
+                "business_name": "Bridal Glamour Makeup Studio",
+                "email": "info@glamourstudio.com",
+                "phone": "+91 9876543222",
+                "category": "Makeup",
+                "services": ["Bridal Makeup", "Groom Styling", "Hair Styling", "Pre-Wedding Makeup"],
+                "pricing_range": {"min": 20000, "max": 80000},
+                "location": "Mumbai",
+                "description": "Professional bridal makeup artists creating stunning looks for your wedding day with premium products and techniques.",
+                "rating": 4.7,
+                "total_reviews": 145,
+                "verified": True
+            },
+            {
+                "name": "Beauty Bliss",
+                "business_name": "Beauty Bliss Bridal Studio",
+                "email": "contact@beautybliss.com",
+                "phone": "+91 9876543223",
+                "category": "Makeup",
+                "services": ["HD Makeup", "Traditional Look", "Modern Styling", "Mehendi Design"],
+                "pricing_range": {"min": 25000, "max": 90000},
+                "location": "Pune",
+                "description": "Expert makeup artists specializing in both traditional and contemporary bridal looks with personalized styling.",
+                "rating": 4.6,
+                "total_reviews": 123,
+                "verified": True
+            },
+            
+            # Invitations Vendors
+            {
+                "name": "Creative Cards",
+                "business_name": "Creative Wedding Invitations",
+                "email": "orders@creativecards.com",
+                "phone": "+91 9876543224",
+                "category": "Invitations",
+                "services": ["Custom Design", "Digital Invitations", "Traditional Cards", "Wedding Stationery"],
+                "pricing_range": {"min": 5000, "max": 50000},
+                "location": "Mumbai",
+                "description": "Unique and personalized wedding invitation designs creating the perfect first impression for your special day.",
+                "rating": 4.5,
+                "total_reviews": 189,
+                "verified": True
+            },
+            {
+                "name": "Paper Art Studio",
+                "business_name": "Artistic Wedding Stationery",
+                "email": "info@paperart.com",
+                "phone": "+91 9876543225",
+                "category": "Invitations",
+                "services": ["Handmade Cards", "Calligraphy", "Laser Cut Designs", "Wedding Albums"],
+                "pricing_range": {"min": 8000, "max": 60000},
+                "location": "Delhi",
+                "description": "Handcrafted wedding stationery with artistic designs and personalized calligraphy for elegant wedding invitations.",
+                "rating": 4.8,
+                "total_reviews": 76,
+                "verified": True
+            },
+            
+            # Jewelry Vendors
+            {
+                "name": "Golden Touch Jewelers",
+                "business_name": "Golden Touch Wedding Jewelry",
+                "email": "info@goldentouch.com",
+                "phone": "+91 9876543226",
+                "category": "Jewelry",
+                "services": ["Bridal Sets", "Gold Jewelry", "Custom Design", "Rental Options"],
+                "pricing_range": {"min": 50000, "max": 500000},
+                "location": "Mumbai",
+                "description": "Exquisite bridal jewelry collection with traditional and contemporary designs, offering both purchase and rental options.",
+                "rating": 4.7,
+                "total_reviews": 134,
+                "verified": True
+            },
+            {
+                "name": "Diamond Dreams",
+                "business_name": "Diamond Dreams Jewelry",
+                "email": "contact@diamonddreams.com",
+                "phone": "+91 9876543227",
+                "category": "Jewelry",
+                "services": ["Diamond Jewelry", "Kundan Sets", "Temple Jewelry", "Matching Accessories"],
+                "pricing_range": {"min": 75000, "max": 800000},
+                "location": "Hyderabad",
+                "description": "Premium jewelry designers creating stunning bridal collections with precious stones and traditional craftsmanship.",
+                "rating": 4.8,
+                "total_reviews": 67,
+                "verified": True
+            },
+            
+            # Clothing Vendors
+            {
+                "name": "Silk Splendor",
+                "business_name": "Silk Splendor Bridal Wear",
+                "email": "orders@silksplendor.com",
+                "phone": "+91 9876543228",
+                "category": "Clothing",
+                "services": ["Bridal Lehengas", "Groom Sherwanis", "Custom Tailoring", "Designer Collection"],
+                "pricing_range": {"min": 30000, "max": 200000},
+                "location": "Mumbai",
+                "description": "Elegant bridal wear collection featuring traditional and modern designs with premium fabrics and intricate embroidery.",
+                "rating": 4.6,
+                "total_reviews": 156,
+                "verified": True
+            },
+            {
+                "name": "Royal Attire",
+                "business_name": "Royal Wedding Attire",
+                "email": "info@royalattire.com",
+                "phone": "+91 9876543229",
+                "category": "Clothing",
+                "services": ["Designer Outfits", "Traditional Wear", "Reception Dresses", "Accessories"],
+                "pricing_range": {"min": 40000, "max": 300000},
+                "location": "Delhi",
+                "description": "Premium wedding attire boutique offering designer collections for both bride and groom with personalized styling services.",
+                "rating": 4.7,
+                "total_reviews": 98,
                 "verified": True
             }
         ]
