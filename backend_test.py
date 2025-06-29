@@ -651,6 +651,12 @@ def run_all_tests():
     test_wedding_plans()
     test_platform_stats()
     
+    # Test the new features
+    test_expanded_sample_database()
+    test_new_vendor_creation()
+    test_category_filtering()
+    test_web_search_enhancement()
+    
     print("\n" + "="*30 + " TEST RESULTS SUMMARY " + "="*30 + "\n")
     
     all_passed = True
