@@ -34,6 +34,13 @@ const App = () => {
     fetchVendors();
     // Create a temporary user for demo
     createDemoUser();
+    // Initialize services array if empty
+    if (vendorFormData.services.length === 0) {
+      setVendorFormData(prev => ({
+        ...prev,
+        services: [''] // Start with one empty service field
+      }));
+    }
   }, []);
 
   const createDemoUser = async () => {
