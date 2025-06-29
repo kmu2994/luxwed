@@ -68,7 +68,11 @@ const App = () => {
         session_id: sessionId || undefined
       });
 
-      const aiMessage = { role: 'assistant', content: response.data.response };
+      const aiMessage = { 
+        role: 'assistant', 
+        content: response.data.response,
+        webSearchUsed: response.data.web_search_used
+      };
       setChatMessages(prev => [...prev, aiMessage]);
       
       if (response.data.session_id && !sessionId) {
