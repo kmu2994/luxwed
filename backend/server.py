@@ -720,10 +720,22 @@ async def startup_event():
     """Initialize database with sample data"""
     logger.info("Starting AI Wedding Services Platform...")
     
-    # Create sample vendors if database is empty
+    # Create sample vendors if database is empty or incomplete
     vendor_count = await db.vendors.count_documents({})
-    if vendor_count == 0:
-        logger.info("Initializing comprehensive sample vendors...")
+    required_categories = ["Photography", "Catering", "Venue", "Decoration", "Music", "Transportation", "Makeup", "Invitations", "Jewelry", "Clothing"]
+    
+    # Check if we have vendors for all required categories
+    existing_categories = await db.vendors.distinct("category")
+    missing_categories = set(required_categories) - set(existing_categories)
+    
+    if vendor_count == 0 or missing_categories:
+        logger.info(f"Initializing comprehensive sample vendors... Current count: {vendor_count}, Missing categories: {missing_categories}")
+        
+        # Clear existing sample vendors to avoid duplicates (optional)
+        if vendor_count > 0:
+            logger.info("Clearing existing incomplete vendor data...")
+            await db.vendors.delete_many({})
+        
         sample_vendors = [
             # Photography Vendors
             {
@@ -1026,11 +1038,34 @@ async def startup_event():
             }
         ]
         
-        for vendor_data in sample_vendors:
-            vendor = Vendor(**vendor_data)
-            await db.vendors.insert_one(vendor.dict())
-        
-        logger.info(f"Initialized {len(sample_vendors)} sample vendors")
+        # Insert sample vendors using insert_many with error handling
+        try:
+            for vendor_data in sample_vendors:
+                vendor = Vendor(**vendor_data)
+                await db.vendors.insert_one(vendor.dict())
+            
+            logger.info(f"Successfully initialized {len(sample_vendors)} sample vendors")
+            
+            # Verify the initialization
+            final_count = await db.vendors.count_documents({})
+            final_categories = await db.vendors.distinct("category")
+            logger.info(f"Final vendor count: {final_count}, Categories: {final_categories}")
+            
+        except Exception as e:
+            logger.error(f"Error inserting sample vendors: {e}")
+            # Try inserting one by one if bulk insert fails
+            successful_inserts = 0
+            for vendor_data in sample_vendors:
+                try:
+                    vendor = Vendor(**vendor_data)
+                    await db.vendors.insert_one(vendor.dict())
+                    successful_inserts += 1
+                except Exception as insert_error:
+                    logger.error(f"Error inserting vendor {vendor_data.get('business_name', 'Unknown')}: {insert_error}")
+            
+            logger.info(f"Successfully inserted {successful_inserts} out of {len(sample_vendors)} vendors")
+    else:
+        logger.info(f"Database already has {vendor_count} vendors with all categories covered")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
