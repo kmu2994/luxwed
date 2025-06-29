@@ -471,46 +471,112 @@ async def get_ai_suggestions(user_message: str, user_context: Dict) -> List[str]
     
     if 'budget' in user_message.lower():
         suggestions.extend([
-            "Show me vendors within my budget",
-            "Help me allocate my wedding budget",
-            "What can I get for my budget?"
+            "Show me current market prices for vendors",
+            "What are the latest 2025 wedding cost trends?",
+            "Help me allocate my wedding budget smartly"
         ])
     elif 'venue' in user_message.lower():
         suggestions.extend([
-            "Show me venues in my area",
-            "What's the average venue cost?",
-            "Outdoor vs indoor venue options"
+            "Find trending venues in my area",
+            "What's the current average venue cost?",
+            "Show me latest venue booking trends"
         ])
     elif 'photography' in user_message.lower():
         suggestions.extend([
-            "Find photographers in my budget",
-            "Traditional vs candid photography",
-            "Pre-wedding shoot packages"
+            "What are current photography trends?",
+            "Find photographers with latest pricing",
+            "Show me trending photography styles 2025"
+        ])
+    elif any(word in user_message.lower() for word in ['trend', 'latest', 'current', '2025']):
+        suggestions.extend([
+            "What are the hottest wedding trends right now?",
+            "Show me current market pricing",
+            "What's trending in weddings this season?"
         ])
     else:
         suggestions.extend([
-            "Create my wedding timeline",
-            "Show me vendor recommendations",
-            "Help with budget planning",
-            "What should I book first?"
+            "What are current wedding costs in my city?",
+            "Show me latest wedding trends for 2025",
+            "Find real-time vendor availability",
+            "What's the current market rate for my budget?"
         ])
     
     return suggestions[:3]  # Return top 3 suggestions
 
-# Vendor Recommendations
+# Real-time Market Data Endpoint
+@api_router.get("/market-data")
+async def get_market_data(category: Optional[str] = None, location: Optional[str] = None):
+    """Get real-time market data for wedding services"""
+    try:
+        # Construct search query
+        search_query = f"wedding {category or 'services'} {location or 'India'} current prices 2025"
+        
+        # Get real-time market information
+        market_info = await perform_web_search(search_query)
+        
+        # Also get local database stats
+        local_vendors = await db.vendors.find({
+            **({"category": category} if category else {}),
+            **({"location": {"$regex": location, "$options": "i"}} if location else {})
+        }).to_list(100)
+        
+        # Calculate local market averages
+        if local_vendors:
+            avg_min_price = sum(v.get('pricing_range', {}).get('min', 0) for v in local_vendors) / len(local_vendors)
+            avg_max_price = sum(v.get('pricing_range', {}).get('max', 0) for v in local_vendors) / len(local_vendors)
+            avg_rating = sum(v.get('rating', 0) for v in local_vendors) / len(local_vendors)
+        else:
+            avg_min_price = avg_max_price = avg_rating = 0
+        
+        return {
+            "web_market_info": market_info,
+            "local_market_stats": {
+                "average_price_range": {
+                    "min": int(avg_min_price),
+                    "max": int(avg_max_price)
+                },
+                "average_rating": round(avg_rating, 2),
+                "vendor_count": len(local_vendors),
+                "category": category or "all",
+                "location": location or "all"
+            },
+            "timestamp": datetime.utcnow().isoformat(),
+            "data_source": "real_time_web_search + local_database"
+        }
+        
+    except Exception as e:
+        logging.error(f"Market data error: {e}")
+        raise HTTPException(status_code=500, detail=f"Market data service error: {str(e)}")
+
+# Enhanced vendor recommendations with web search
 @api_router.get("/recommendations/{user_id}")
-async def get_recommendations(user_id: str, category: Optional[str] = None):
+async def get_recommendations(user_id: str, category: Optional[str] = None, use_web_search: bool = True):
     user = await db.users.find_one({"id": user_id})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
     preferences = user.get('preferences', {})
+    
+    # Get local recommendations
     recommendations = await get_vendor_recommendations(preferences, category)
+    
+    # Get real-time market insights if requested
+    market_insights = None
+    if use_web_search:
+        try:
+            location = preferences.get('location', 'India')
+            search_query = f"best wedding {category or 'vendors'} {location} 2025 recommendations"
+            market_insights = await perform_web_search(search_query)
+        except Exception as e:
+            logging.error(f"Web search for recommendations failed: {e}")
     
     return {
         "recommendations": recommendations,
         "total_count": len(recommendations),
-        "category": category or "all"
+        "category": category or "all",
+        "user_preferences": preferences,
+        "market_insights": market_insights,
+        "web_search_used": use_web_search and market_insights is not None
     }
 
 # Wedding Plans
