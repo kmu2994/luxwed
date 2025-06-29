@@ -249,15 +249,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "User Management"
-    - "Vendor Management"
-    - "AI Chat System"
-    - "Vendor Recommendations"
-    - "Inquiries"
-    - "Wedding Plans"
-    - "Platform Stats"
+    - "Web Search Enhancement"
+    - "Vendor Management UI"
+    - "Expanded Sample Database"
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
