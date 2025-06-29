@@ -231,6 +231,16 @@ const App = () => {
                 Vendors
               </button>
               <button
+                onClick={() => setCurrentPage('add-vendor')}
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  currentPage === 'add-vendor' 
+                    ? 'bg-rose-500 text-white shadow-lg transform scale-105' 
+                    : 'text-rose-600 hover:bg-rose-100'
+                }`}
+              >
+                Add Vendor
+              </button>
+              <button
                 onClick={() => setCurrentPage('chat')}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   currentPage === 'chat' 
