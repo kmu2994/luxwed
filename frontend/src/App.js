@@ -14,6 +14,19 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [showVendorForm, setShowVendorForm] = useState(false);
+  const [vendorFormData, setVendorFormData] = useState({
+    name: '',
+    business_name: '',
+    email: '',
+    phone: '',
+    category: 'Photography',
+    services: [],
+    pricing_range: { min: 0, max: 0 },
+    location: '',
+    description: '',
+    portfolio_images: []
+  });
   const chatEndRef = useRef(null);
 
   // Initialize app
