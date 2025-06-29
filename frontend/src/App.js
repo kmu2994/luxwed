@@ -419,10 +419,16 @@ const App = () => {
                   <div className="bg-white border border-rose-200 p-4 rounded-2xl mr-4">
                     <div className="flex items-center gap-3">
                       <div className="text-2xl">🤖</div>
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-rose-300 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-rose-300 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                        <div className="w-2 h-2 bg-rose-300 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                      <div className="flex flex-col">
+                        <div className="flex space-x-1 mb-1">
+                          <div className="w-2 h-2 bg-rose-300 rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-rose-300 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                          <div className="w-2 h-2 bg-rose-300 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                        </div>
+                        <div className="text-xs text-gray-500 flex items-center gap-1">
+                          <span className="animate-pulse">🌐</span>
+                          <span>Searching web for latest info...</span>
+                        </div>
                       </div>
                     </div>
                   </div>
