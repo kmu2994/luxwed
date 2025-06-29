@@ -50,6 +50,20 @@ test_vendor = {
     "portfolio_images": ["image1.jpg", "image2.jpg"]
 }
 
+# New vendor with expanded fields for testing new vendor creation
+test_new_vendor = {
+    "name": "Aisha Khan",
+    "business_name": "Aisha's Bridal Jewelry",
+    "email": "aisha@bridaljewelry.com",
+    "phone": "+91 9876543216",
+    "category": "Jewelry",
+    "services": ["Custom Designs", "Traditional Sets", "Modern Collections", "Rental Options"],
+    "pricing_range": {"min": 75000, "max": 350000},
+    "location": "Mumbai",
+    "description": "Exquisite bridal jewelry collections with both traditional and contemporary designs. We offer custom designs and rental options for your special day.",
+    "portfolio_images": ["jewelry1.jpg", "jewelry2.jpg", "jewelry3.jpg"]
+}
+
 test_inquiry = {
     "message": "I'm interested in your photography services for my wedding on December 15th. Can you share your availability and packages?"
 }
