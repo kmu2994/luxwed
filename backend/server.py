@@ -11,6 +11,8 @@ import uuid
 from datetime import datetime
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 import asyncio
+import aiohttp
+import json as json_module
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
