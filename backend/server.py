@@ -296,14 +296,18 @@ async def chat_with_ai(message: ChatMessage):
         user_context = user.get('preferences', {})
         
         # Get existing chat session
-        chat_session = await db.chat_sessions.find_one({"session_id": session_id, "user_id": message.user_id})
-        if not chat_session:
+        chat_session_data = await db.chat_sessions.find_one({"session_id": session_id, "user_id": message.user_id})
+        if not chat_session_data:
             chat_session = ChatSession(
                 user_id=message.user_id,
                 session_id=session_id,
                 context=user_context
             )
             await db.chat_sessions.insert_one(chat_session.dict())
+            chat_session_messages = []
+        else:
+            chat_session = ChatSession(**chat_session_data)
+            chat_session_messages = chat_session.messages
         
         # Get AI response
         chat = await ai_planner.get_chat_instance(session_id, user_context)
@@ -311,7 +315,7 @@ async def chat_with_ai(message: ChatMessage):
         
         # Store conversation
         conversation_update = {
-            "messages": chat_session.get('messages', []) + [
+            "messages": chat_session_messages + [
                 {"role": "user", "content": message.message, "timestamp": datetime.utcnow().isoformat()},
                 {"role": "assistant", "content": ai_response, "timestamp": datetime.utcnow().isoformat()}
             ],
