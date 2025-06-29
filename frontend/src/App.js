@@ -601,6 +601,10 @@ const App = () => {
                     {vendor.category === 'Decoration' && '🌸'}
                     {vendor.category === 'Music' && '🎵'}
                     {vendor.category === 'Transportation' && '🚗'}
+                    {vendor.category === 'Makeup' && '💄'}
+                    {vendor.category === 'Invitations' && '💌'}
+                    {vendor.category === 'Jewelry' && '💎'}
+                    {vendor.category === 'Clothing' && '👗'}
                   </div>
                 </div>
                 <div className="p-6">
